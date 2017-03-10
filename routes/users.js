@@ -7,6 +7,7 @@ const config = require('../config/database');
 //Register
 router.post('/register', (req, res, next) => {
 
+    // console.log(req.body);
     let newUser = new User({
         name: req.body.name,
         email: req.body.email,
@@ -26,10 +27,10 @@ router.post('/register', (req, res, next) => {
 });
 
 //Authenticate
-router.post('/authentication', (req, res, next) => {
+router.post('/authenticate', (req, res, next) => {
 
     const username = req.body.username;
-    const password = req.body.password
+    const password = req.body.password;
 
     User.getUserByUsername(username, (err, user) => {
         if (err) throw err;
@@ -38,6 +39,7 @@ router.post('/authentication', (req, res, next) => {
             return res.json({ success: false, msg: "User Not Found" });
 
         }
+
         User.comparePassword(password, user.password, (err, isMatch) => {
             if (err) throw err;
             if (isMatch) {
