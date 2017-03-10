@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import 'rxjs/add/operator/map';
+import {tokenNotExpired} from 'angular2-jwt';
 
 @Injectable()
 export class AuthService {
@@ -27,6 +28,16 @@ user:any;
     .map(res=>res.json()); 
   }
 
+  getProfile()
+  {
+     let headers = new Headers();
+     this.loadToken();
+     headers.append('Authorization',this.authToken);
+    headers.append('Content-Type','application/json');
+    return this.http.get('http://localhost:3000/users/profile',{headers:headers})
+    .map(res=>res.json()); 
+  }
+
   storeUserData(token,user)
   {
     //jwt will by default look for id_token key in the local storage. So this is the default key name
@@ -35,6 +46,17 @@ user:any;
     this.authToken =token;
     this.user = user;
   }
+
+loadToken()
+{
+  const token = localStorage.getItem('id_token');
+  this.authToken = token;
+}
+
+loggedIn()
+{
+  return tokenNotExpired();
+}
 
   logout()
   {

@@ -43,6 +43,11 @@ app.get('/', (req, res) => {
     res.send('Invalid End point');
 });
 
+//by default every route will go to index.html
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/index.html'));
+});
+
 //start the server
 app.listen(port, () => {
     console.log('server started on the port ' + port);
